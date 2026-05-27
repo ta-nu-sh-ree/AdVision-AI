@@ -159,36 +159,58 @@ def check_image_category(image_path, sector_key):
         print(f"   Guardrail error: {e}")
         return True
 
-def get_screening_score(text, resolution, sector_key):
+def get_screening_score(image_path, resolution, sector_key):
     print("📋 Getting Screening Score...")
-    text_content = text if text else "No text"
-    
+    base64_image = encode_image_to_base64(image_path)
+    if not base64_image:
+        return "<p>Screening analysis unavailable</p>"
+
     sector_name = SECTOR_CONFIG[sector_key]['name']
     focus_areas = SECTOR_CONFIG[sector_key]['screening_focus']
-    
-    prompt = f"""You are a {sector_name} ad screening expert.
+    focus_lines = "\n".join([f"{f}: [Analysis]" for f in focus_areas])
 
-Respond in Key-Value format:
-Image Resolution: [Value]
+    prompt = f"""Look at this {sector_name} advertisement image VERY carefully. Read every text visible in the image.
+
+Answer each field based on what you can literally SEE and READ in the image:
+Image Resolution: {resolution}
 Headline Found: [Yes/No]
-CTA Found: [Yes/No]
-Contact Details Found: [Yes/No]
-Price Found: [Yes/No]
+CTA Found: [Yes/No - look for Book Now, Contact Us, Call Today etc]
+Contact Details Found: [Yes/No - look for phone numbers, email, website]
+Price Found: [Yes/No - look for any number with Cr, Lakh, Rs, rupee symbol]
 Social Media Mentioned: [Yes/No]
-"""
-    
-    for focus in focus_areas:
-        prompt += f"{focus}: [Analysis]\n"
-    
+{focus_lines}
+
+READ THE IMAGE TEXT CAREFULLY before answering. Do not say No if you can see it."""
+
     try:
         chat_completion = groq_client.chat.completions.create(
             messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": f"Resolution: {resolution}. Text: '{text_content}'"}
+                {"role": "system", "content": f"You are a {sector_name} ad screening expert. Analyze the image and respond in Key-Value format only. No extra text."},
+                {"role": "user", "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": base64_image}},
+                ]}
             ],
-            model="llama-3.1-8b-instant", 
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            max_tokens=500,
             temperature=0.1
         )
+        response_text = chat_completion.choices[0].message.content
+        lines = [line.strip() for line in response_text.strip().split('\n') if line.strip()]
+
+        html_output = ""
+        for line in lines:
+            parts = line.split(':', 1)
+            if len(parts) == 2:
+                key = parts[0].strip() + ':'
+                value = parts[1].strip()
+                value_class = 'yes' if value.lower() == 'yes' else ('no' if value.lower() == 'no' else 'other')
+                html_output += f"<div class='screening-item'><span class='key'>{key}</span><span class='value {value_class}'>{value}</span></div>\n"
+
+        return html_output if html_output else "<p>Screening complete</p>"
+    except Exception as e:
+        print(f"   Screening error: {e}")
+        return "<p>Screening analysis unavailable</p>"
         response_text = chat_completion.choices[0].message.content
         lines = [line.strip() for line in response_text.strip().split('\n') if line.strip()]
 
@@ -641,7 +663,7 @@ def free_trial():
             resolution = get_image_resolution(filepath)
             ad_text = get_text_from_image(filepath)
 
-            screening_results_html = get_screening_score(ad_text, resolution, sector_key)
+            screening_results_html = get_screening_score(filepath, resolution, sector_key)
             main_analysis = get_main_scores(filepath, sector_key, ad_text)
             
             if not main_analysis:
