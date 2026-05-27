@@ -4,7 +4,6 @@ import mimetypes
 from flask import Flask, request, render_template, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
-import easyocr
 from groq import Groq
 from dotenv import load_dotenv
 import traceback
@@ -66,13 +65,7 @@ SECTOR_CONFIG = {
     }
 }
 
-print("Loading EasyOCR...")
-try:
-    ocr_reader = easyocr.Reader(['en', 'mr', 'hi'], gpu=False) 
-    print("✅ EasyOCR loaded successfully.")
-except Exception as e:
-    print(f"❌ CRITICAL ERROR: Could not load EasyOCR. {e}")
-    ocr_reader = None
+ocr_reader = None
 
 # --- HELPER FUNCTIONS ---
 
