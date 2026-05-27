@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdScore - AI-Powered Ad Analysis Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>AdScore</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#hero" class="nav-link">Home</a>
+                    <a href="#gallery" class="nav-link">Gallery</a>
+                    <a href="#effortless" class="nav-link">Effortless AI Ads</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+                <div class="header-buttons">
+                    <a href="{{ url_for('free_trial') }}" class="btn btn-primary">Free Trial</a>
+                    <a href="#contact" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">AI-Powered Ad Analysis That Drives Results</h1>
+                <p class="hero-subtitle">Transform your advertising strategy with intelligent scoring, real-time insights, and platform-specific recommendations</p>
+                <a href="{{ url_for('free_trial') }}" class="btn btn-hero">Start Free Trial</a>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Proven Success Across Industries</h2>
+            <div class="gallery-wrapper">
+                <div class="gallery-scroll">
+                    {% for i in range(1, 21) %}
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/gallery/ad' ~ i ~ '.png') }}" alt="Ad Example {{ i }}" loading="lazy">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Launch/Traction Section -->
+    <section class="launch-section">
+        <div class="container">
+            <h2 class="section-title">Your Ad Journey, Simplified</h2>
+            <div class="launch-grid">
+                <div class="launch-card">
+                    <div class="launch-icon">
+                        <img src="{{ url_for('static', filename='images/create.png') }}" alt="Create">
+                    </div>
+                    <h3>Create</h3>
+                    <p>AI understands and evaluates your ad creatives with precision, analyzing every element for maximum impact</p>
+                </div>
+                <div class="launch-card">
+                    <div class="launch-icon">
+                        <img src="{{ url_for('static', filename='images/launch.png') }}" alt="Launch">
+                    </div>
+                    <h3>Launch</h3>
+                    <p>Ads prepared for platform readiness with optimized formats and messaging for each channel</p>
+                </div>
+                <div class="launch-card">
+                    <div class="launch-icon">
+                        <img src="{{ url_for('static', filename='images/track.png') }}" alt="Track">
+                    </div>
+                    <h3>Track</h3>
+                    <p>AI scoring, performance tracking, and actionable insights to continuously improve your campaigns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Effortless AI Ads Section -->
+    <section class="effortless-section" id="effortless">
+        <div class="container">
+            <h2 class="section-title">Effortless, On-Brand AI Ads — In Minutes</h2>
+            <p class="section-subtitle">Industry-specific intelligence across every sector</p>
+            
+            <div class="sector-tabs">
+                <button class="sector-tab active" data-sector="real-estate">Real Estate</button>
+                <button class="sector-tab" data-sector="jewellery">Jewellery</button>
+                <button class="sector-tab" data-sector="automobile">Automobile</button>
+                <button class="sector-tab" data-sector="ecommerce">E-commerce</button>
+                <button class="sector-tab" data-sector="healthcare">Healthcare</button>
+            </div>
+
+            <div class="sector-content">
+                <div class="sector-images active" data-sector-content="real-estate">
+                    <img src="{{ url_for('static', filename='images/sector-1.png') }}" alt="Real Estate 1">
+                    <img src="{{ url_for('static', filename='images/sector-2.png') }}" alt="Real Estate 2">
+                    <img src="{{ url_for('static', filename='images/sector-3.jpg') }}" alt="Real Estate 3">
+                </div>
+                <div class="sector-images" data-sector-content="jewellery">
+                    <img src="{{ url_for('static', filename='images/sector-4.png') }}" alt="Jewellery 1">
+                    <img src="{{ url_for('static', filename='images/sector-5.png') }}" alt="Jewellery 2">
+                    <img src="{{ url_for('static', filename='images/sector-6.png') }}" alt="Jewellery 3">
+                </div>
+                <div class="sector-images" data-sector-content="automobile">
+                    <img src="{{ url_for('static', filename='images/sector-7.png') }}" alt="Automobile 1">
+                    <img src="{{ url_for('static', filename='images/sector-8.png') }}" alt="Automobile 2">
+                    <img src="{{ url_for('static', filename='images/sector-9.png') }}" alt="Automobile 3">
+                </div>
+                <div class="sector-images" data-sector-content="ecommerce">
+                    <img src="{{ url_for('static', filename='images/sector-10.png') }}" alt="E-commerce 1">
+                    <img src="{{ url_for('static', filename='images/sector-11.png') }}" alt="E-commerce 2">
+                    <img src="{{ url_for('static', filename='images/sector-12.png') }}" alt="E-commerce 3">
+                </div>
+                <div class="sector-images" data-sector-content="healthcare">
+                    <img src="{{ url_for('static', filename='images/sector-13.png') }}" alt="Healthcare 1">
+                    <img src="{{ url_for('static', filename='images/sector-14.png') }}" alt="Healthcare 2">
+                    <img src="{{ url_for('static', filename='images/sector-15.png') }}" alt="Healthcare 3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agentic System Section -->
+    <section class="agentic-section">
+        <div class="container">
+            <h2 class="section-title">Agentic Ad System: Turning Tests into Strategic Wins</h2>
+            <p class="section-subtitle">Our AI doesn't just analyze—it learns, adapts, and optimizes</p>
+            <div class="agentic-content">
+                <div class="agentic-text">
+                    <div class="agentic-feature">
+                        <h3>Strategy</h3>
+                        <p>AI develops intelligent testing frameworks based on your goals</p>
+                    </div>
+                    <div class="agentic-feature">
+                        <h3>Testing</h3>
+                        <p>Continuous evaluation across platforms and audience segments</p>
+                    </div>
+                    <div class="agentic-feature">
+                        <h3>Learning</h3>
+                        <p>Pattern recognition identifies what drives performance</p>
+                    </div>
+                    <div class="agentic-feature">
+                        <h3>Improvement</h3>
+                        <p>Actionable recommendations that compound over time</p>
+                    </div>
+                </div>
+                <div class="agentic-visual">
+                    <img src="{{ url_for('static', filename='images/agentic-1.png') }}" alt="Agentic System">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Omnichannel Section -->
+    <section class="omnichannel-section">
+        <div class="container">
+            <h2 class="section-title">Omnichannel Ads</h2>
+            <p class="section-subtitle">Optimized for every platform, ready to perform</p>
+            <div class="platform-grid">
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-1.png') }}" alt="Facebook">
+                    <p>Facebook</p>
+                </div>
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-2.png') }}" alt="Instagram">
+                    <p>Instagram</p>
+                </div>
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-3.png') }}" alt="YouTube">
+                    <p>YouTube</p>
+                </div>
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-4.png') }}" alt="Twitter">
+                    <p>Twitter</p>
+                </div>
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-5.png') }}" alt="Google">
+                    <p>Google Ads</p>
+                </div>
+                <div class="platform-item">
+                    <img src="{{ url_for('static', filename='images/icon-6.png') }}" alt="LinkedIn">
+                    <p>LinkedIn</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Tools Section -->
+    <section class="ai-tools-section">
+        <div class="container">
+            <h2 class="section-title">AI Tools That Adapt to Your Needs</h2>
+            <p class="section-subtitle">Intelligent analysis that grows with your business</p>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>Visual Analysis</h3>
+                    <p>Deep learning algorithms evaluate color, composition, and visual hierarchy</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Text Recognition</h3>
+                    <p>OCR technology extracts and analyzes every word in your creative</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Brand Consistency</h3>
+                    <p>Ensure every ad maintains your brand identity across channels</p>
+                </div>
+                <div class="tool-card">
+                    <h3>Performance Prediction</h3>
+                    <p>AI forecasts how your ad will perform before you spend a dollar</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">Trusted by Marketing Leaders</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <img src="{{ url_for('static', filename='images/testimonial-1.png') }}" alt="Customer 1">
+                    <p class="testimonial-text">"AdScore transformed our campaign performance. We saw a 40% increase in engagement within the first month."</p>
+                    <p class="testimonial-author">Sarah Johnson, Marketing Director</p>
+                </div>
+                <div class="testimonial-card">
+                    <img src="{{ url_for('static', filename='images/testimonial-2.png') }}" alt="Customer 2">
+                    <p class="testimonial-text">"The AI insights are incredibly accurate. It's like having a creative director and data analyst in one platform."</p>
+                    <p class="testimonial-author">Michael Chen, Creative Lead</p>
+                </div>
+                <div class="testimonial-card">
+                    <img src="{{ url_for('static', filename='images/testimonial-3.png') }}" alt="Customer 3">
+                    <p class="testimonial-text">"Finally, a tool that understands industry-specific nuances. Game changer for our real estate campaigns."</p>
+                    <p class="testimonial-author">Emily Rodriguez, Real Estate CMO</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Replace Manual Work Section -->
+    <section class="automation-section">
+        <div class="container">
+            <div class="automation-content">
+                <div class="automation-text">
+                    <h2>Replace Manual Work</h2>
+                    <p>Stop spending hours analyzing ad performance manually. Our AI processes thousands of data points in seconds, delivering insights that would take a team days to uncover.</p>
+                    <ul>
+                        <li>Automated scoring across 6 key criteria</li>
+                        <li>Platform-specific recommendations</li>
+                        <li>Real-time performance predictions</li>
+                        <li>Industry-tailored analysis</li>
+                    </ul>
+                    <a href="{{ url_for('free_trial') }}" class="btn btn-primary">Try It Now</a>
+                </div>
+                <div class="automation-visual">
+                    <img src="{{ url_for('static', filename='images/agentic-2.png') }}" alt="Automation">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="section-subtitle">Ready to transform your advertising strategy?</p>
+            <form class="contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AdScore</h3>
+                    <p>AI-Powered Ad Analysis Platform</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <a href="#hero">Home</a>
+                    <a href="#gallery">Gallery</a>
+                    <a href="{{ url_for('free_trial') }}">Free Trial</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#contact">Contact</a>
+                    <a href="#">About</a>
+                    <a href="#">Careers</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AdScore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='animations.js') }}"></script>
+</body>
+</html>

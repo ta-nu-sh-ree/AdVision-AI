@@ -1,0 +1,5 @@
+flask
+gunicorn
+Pillow
+groq
+python-dotenv

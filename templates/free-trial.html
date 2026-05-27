@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdScore - Free Trial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Upload Form Section */
+        .upload-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .upload-section h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .upload-section p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group select,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-analyze {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-analyze:active {
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            background: #fee;
+            border-left: 4px solid #f44;
+            padding: 15px;
+            border-radius: 5px;
+            color: #c33;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .back-arrow {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-arrow:hover {
+            background: #5568d3;
+            transform: translateX(-5px);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Left Column - Image & Score */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .uploaded-image-container {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .uploaded-image-container img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .score-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .overall-score-big {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score-summary h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .score-summary p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* Right Column - Navigation Tabs */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .nav-tab {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .nav-tab h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .nav-tab p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Tab Content Area */
+        .tab-content-area {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Overall Score Tab - Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bar-label {
+            width: 250px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .bar-container {
+            flex: 1;
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Actionable Advice Tab */
+        .advice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .advice-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .advice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .advice-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .advice-card .score-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .advice-card .evaluation {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .advice-card .evaluation.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .advice-card .evaluation.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .advice-card .reason {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        /* Advice Popup */
+        .advice-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .advice-popup.active {
+            display: block;
+            animation: popupIn 0.3s;
+        }
+
+        @keyframes popupIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .popup-overlay.active {
+            display: block;
+        }
+
+        .advice-popup h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .advice-popup ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advice-popup li {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            line-height: 1.6;
+        }
+
+        .close-popup {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        /* Platform Specification Tab */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .platform-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .platform-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .platform-card h4 {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .platform-score {
+            background: #667eea;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .view-more-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .view-more-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .platform-rationale {
+            display: none;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            line-height: 1.6;
+            color: #555;
+            border-left: 4px solid #667eea;
+        }
+
+        .platform-rationale.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Screening Report Tab */
+        .screening-report {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .screening-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .screening-item:last-child {
+            border-bottom: none;
+        }
+
+        .screening-item .key {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .screening-item .value {
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.95em;
+        }
+
+        .screening-item .value.yes {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .screening-item .value.no {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .screening-item .value.other {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .advice-grid,
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-label {
+                width: 150px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Upload Form Section -->
+        <div class="upload-section" id="uploadSection">
+            <h1>🎯 AdScore - Free Trial</h1>
+            <p>Upload your advertisement and get instant AI-powered analysis</p>
+
+            {% if error %}
+            <div class="error-message">
+                ❌ {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="category">Select Industry Sector:</label>
+                    <select name="category" id="category" required>
+                        <option value="">-- Choose Sector --</option>
+                        {% for key, config in sectors.items() %}
+                        <option value="{{ key }}">{{ config.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="file">Upload Advertisement Image:</label>
+                    <input type="file" name="file" id="file" accept=".png,.jpg,.jpeg,.gif" required>
+                </div>
+
+                <button type="submit" class="btn-analyze">🚀 Analyze Advertisement</button>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        {% if results %}
+        <div class="results-section active" id="resultsSection">
+            <button class="back-arrow" onclick="backToUpload()">← Back to Upload</button>
+
+            <div class="results-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <div class="uploaded-image-container">
+                        <img src="{{ url_for('uploaded_file', filename=results.uploaded_file) }}" alt="Uploaded Ad">
+                    </div>
+
+                    <div class="score-summary">
+                        <h3>Overall AdScore</h3>
+                        <div class="overall-score-big">{{ results.overall_score }}<span style="font-size: 0.5em;">/100</span></div>
+                        <p>{{ results.summary }}</p>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <div class="nav-tabs">
+                        <div class="nav-tab active" onclick="switchTab('overall', this)">
+                            <h3>📊 Overall Score</h3>
+                            <p>Performance metrics</p>
+                        </div>
+                        <div class="nav-tab" onclick="switchTab('advice', this)">
+                            <h3>💡 Actionable Advice</h3>
+                            <p>Improvement tips</p>
+                        </div>
+                        <div class="nav-tab" onclick="switchTab('platform', this)">
+                            <h3>🌐 Platform Spec</h3>
+                            <p>Platform analysis</p>
+                        </div>
+                        <div class="nav-tab" onclick="switchTab('screening', this)">
+                            <h3>📋 Screening Report</h3>
+                            <p>Technical details</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-content-area">
+                        <!-- Overall Score Tab -->
+                        <div class="tab-content active" id="overallTab">
+                            <h2 style="margin-bottom: 25px; color: #667eea;">📊 Performance Breakdown</h2>
+                            <div class="bar-chart">
+                                {% for criterion in results.criteria %}
+                                <div class="bar-item">
+                                    <div class="bar-label">{{ criterion.name }}</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" data-width="{{ (criterion.score / criterion.max_score) * 100 }}">
+                                            {{ criterion.score }}/{{ criterion.max_score }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Actionable Advice Tab -->
+                        <div class="tab-content" id="adviceTab">
+                            <h2 style="margin-bottom: 25px; color: #667eea;">💡 Image-Specific Recommendations</h2>
+                            <div class="advice-grid">
+                                {% for item in results.criteria_analysis %}
+                                <div class="advice-card" onclick="showAdvicePopup({{ loop.index0 }})">
+                                    <h4>{{ item.criteria }}</h4>
+                                    <span class="score-badge">
+                                        {% for c in results.criteria %}
+                                            {% if c.name == item.criteria %}
+                                                {{ c.score }}/{{ c.max_score }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="evaluation {{ item.evaluation.lower() }}">{{ item.evaluation }}</span>
+                                    <div class="reason">{{ item.reason }}</div>
+                                    <p style="margin-top: 15px; color: #667eea; font-weight: 600; font-size: 0.9em;">
+                                        👆 Click for detailed advice
+                                    </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Platform Specification Tab -->
+                        <div class="tab-content" id="platformTab">
+                            <h2 style="margin-bottom: 25px; color: #667eea;">🌐 Platform Performance Analysis</h2>
+                            <div class="platform-grid">
+                                {% for platform in results.platform_analysis %}
+                                <div class="platform-card">
+                                    <div class="platform-header">
+                                        <h4>{{ platform.platform }}</h4>
+                                        <span class="platform-score">{{ platform.score }}/10</span>
+                                    </div>
+                                    <button class="view-more-btn" onclick="toggleRationale({{ loop.index0 }}, this)">
+                                        View More ▼
+                                    </button>
+                                    <div class="platform-rationale" id="rationale-{{ loop.index0 }}">
+                                        {{ platform.rationale }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Screening Report Tab -->
+                        <div class="tab-content" id="screeningTab">
+                            <h2 style="margin-bottom: 25px; color: #667eea;">📋 Technical Screening Report</h2>
+                            <div class="screening-report">
+                                {{ results.screening_html | safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advice Popup -->
+        <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+        <div class="advice-popup" id="advicePopup">
+            <h3 id="popupTitle">Advice</h3>
+            <ul id="popupAdviceList"></ul>
+            <button class="close-popup" onclick="closePopup()">Close</button>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if results %}
+    <script>
+        var adviceData = {{ results.criteria_analysis | tojson | safe }};
+    </script>
+    {% else %}
+    <script>
+        var adviceData = [];
+    </script>
+    {% endif %}
+
+    <script>
+        function switchTab(tabName, element) {
+            var i;
+            var tabs = document.querySelectorAll('.nav-tab');
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            element.classList.add('active');
+
+            var contents = document.querySelectorAll('.tab-content');
+            for (i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function showAdvicePopup(index) {
+            if (!adviceData || adviceData.length === 0) return;
+            var item = adviceData[index];
+            document.getElementById('popupTitle').textContent = item.criteria + ' - Advice';
+            
+            var adviceList = document.getElementById('popupAdviceList');
+            adviceList.innerHTML = '';
+            
+            for (var i = 0; i < item.advice_points.length; i++) {
+                var li = document.createElement('li');
+                li.textContent = item.advice_points[i];
+                adviceList.appendChild(li);
+            }
+
+            document.getElementById('popupOverlay').classList.add('active');
+            document.getElementById('advicePopup').classList.add('active');
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            document.getElementById('advicePopup').classList.remove('active');
+        }
+
+        function toggleRationale(index, btn) {
+            var rationale = document.getElementById('rationale-' + index);
+            
+            if (rationale.classList.contains('active')) {
+                rationale.classList.remove('active');
+                btn.textContent = 'View More ▼';
+            } else {
+                rationale.classList.add('active');
+                btn.textContent = 'View Less ▲';
+            }
+        }
+
+        function backToUpload() {
+            document.getElementById('resultsSection').classList.remove('active');
+            document.getElementById('uploadSection').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        if (document.getElementById('resultsSection')) {
+            document.getElementById('uploadSection').style.display = 'none';
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var bars = document.querySelectorAll('.bar-fill');
+                for (var i = 0; i < bars.length; i++) {
+                    var targetWidth = bars[i].getAttribute('data-width');
+                    bars[i].style.width = targetWidth + '%';
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

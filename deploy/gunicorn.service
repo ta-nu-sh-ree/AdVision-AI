@@ -1,0 +1,13 @@
+[Unit]
+Description=gunicorn daemon for AdScore
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/adscore
+EnvironmentFile=/opt/adscore/.env
+ExecStart=/opt/adscore/venv/bin/gunicorn --workers 3 --bind unix:/run/gunicorn-adscore.sock app:app
+
+[Install]
+WantedBy=multi-user.target
